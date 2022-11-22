@@ -3,7 +3,7 @@ import HttpError from 'http-errors';
 
 const router = express.Router(); 
 
-class CustomerRoutes {
+class OrdersRoutes {
     
     constructor() {
         router.get('/', this.getAll); //C
@@ -20,6 +20,6 @@ class CustomerRoutes {
     
 }
 
-new CustomerRoutes();
+new OrdersRoutes();
 
 export default router;
