@@ -1,0 +1,2 @@
+DATABASE="mongodb+srv://admin:A1234567890@3e4mongo.dsn5j4b.mongodb.net/PizzaTP3?retryWrites=true&w=majority"
+PORT=7187
