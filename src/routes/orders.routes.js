@@ -3,23 +3,23 @@ import HttpError from 'http-errors';
 
 const router = express.Router(); 
 
-class ExplorationsRoutes {
+class CustomerRoutes {
     
     constructor() {
-        router.get('/', this.getAll);
-        router.get('/:explorationId', this.getOne);
+        router.get('/', this.getAll); //C
+        router.get('/:idPizzeria/orders/:idOrder', this.getOne); //B
+        
     }
 
     getAll(req, res, next) {
 
     }
-
     getOne(req, res, next) {
 
     }
-
+    
 }
 
-new ExplorationsRoutes();
+new CustomerRoutes();
 
 export default router;
