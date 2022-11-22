@@ -3,7 +3,7 @@ import database from './libs/database.js';
 import errorMiddleware from './middlewares/errors.js';
 
 import planetsRoutes from './routes/planets.routes.js';
-import PizzeriaRoutes from './routes/pizzeria.routes.js'
+import PizzeriaRoutes from './routes/pizzerias.routes.js'
 import CustomerRoutes from './routes/customers.routes.js'
 import OrdersRoutes from './routes/orders.routes.js' 
 
