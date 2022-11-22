@@ -9,8 +9,6 @@ class PizzeriaRoutes {
         router.get('/', this.getAll); //B
         router.get('/:idPizzeria', this.getOne); //A
         router.post('/', this.postOne); //C
-        
-        
     }
 
     getAll(req, res, next) {
