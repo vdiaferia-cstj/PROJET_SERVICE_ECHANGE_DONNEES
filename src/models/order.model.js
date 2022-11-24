@@ -19,10 +19,5 @@ const orderSchema = mongoose.Schema({
   strict:'throw'
 });
 
-orderSchema.virtual('Pizzerias', {
-    localField: '_id',
-    foreignField: 'order',
-    
-});
 
 export default mongoose.model('Order', orderSchema);
