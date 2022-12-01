@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { PLANET_SIZE } from '../libs/constants.js';
+import { PIZZA_SIZES } from '../libs/constants.js';
 import { PIZZA_TOPPINGS } from '../libs/constants.js';
 
 const orderSchema = mongoose.Schema({
@@ -9,9 +9,9 @@ const orderSchema = mongoose.Schema({
 
   pizzas: {
 
-    size: { type: string, required: true, enum: PLANET_SIZE },
+    size: { type: String, required: true, enum: PIZZA_SIZES },
     orderDate: { type: Number, required: true },
-    topping: { type: string, enum: PIZZA_TOPPINGS }
+    topping: { type: String, enum: PIZZA_TOPPINGS }
 
   }
 
