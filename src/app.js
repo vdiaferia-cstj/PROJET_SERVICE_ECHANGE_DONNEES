@@ -16,8 +16,8 @@ app.use(express.json());
 //app.use('/planets', planetsRoutes);
 //app.use('/explorations', explorationsRoutes);
 app.use('/pizzeria', PizzeriaRoutes);
-app.use('/orders', CustomerRoutes);
-app.use('/customer', OrdersRoutes);
+app.use('/orders', OrdersRoutes );
+app.use('/customers',CustomerRoutes );
 
 app.use(errorMiddleware);
 

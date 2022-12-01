@@ -1,6 +1,7 @@
 import express from 'express';
 import HttpError from 'http-errors';
-import customerRepository from '../repositories/';
+import paginate from 'express-paginate';
+import customerRepository from '../repositories/customer.repository.js';
 
 const router = express.Router(); 
 
@@ -9,7 +10,7 @@ class CustomerRoutes {
     constructor() {
         router.post('/', this.postOne); //B
         router.put('/:idCustomer', this.updateOne); //A
-        router.get('/', this.getAll); //A
+        router.get('/', paginate.middleware(20, 40), this.getAll); //A
         router.get('/:idCustomer', this.getOne); //C
         
     }
@@ -19,19 +20,16 @@ class CustomerRoutes {
 
             const retrieveOptions = {
                 limit: req.query.limit,
-                skip: req.skip,
-                planet: req.query.planet
+                skip: req.query.skip
             }
 
             console.log(req.skip);
 
-            let [customers, itemsCount] = await explorationsRepository.retrieve(retrieveOptions);
+            let [customers, itemsCount] = await customerRepository.retrieve(retrieveOptions);
 
-            explorations = explorations.map(e => {
-                e = e.toObject({ getters: false, virtuals: false });
-                e = explorationsRepository.transform(e);
-
-                return e;
+            customers = customers.map(c => {
+                c = c.toObject({ getters: false, virtuals: false });
+                return c;
             });
 
             const pageCount = Math.ceil(itemsCount / req.query.limit);
@@ -52,19 +50,19 @@ class CustomerRoutes {
                     totalDocuments: itemsCount
                 },
                 _links: {
-                    prev: `${process.env.BASE_URL}${links[0].url}`,
-                    self: `${process.env.BASE_URL}${links[1].url}`,
-                    next: `${process.env.BASE_URL}${links[2].url}`
+                    prev: `${process.env.DATABASE}${links[0].url}`,
+                    self: `${process.env.DATABASE}${links[1].url}`,
+                    next: `${process.env.DATABASE}${links[2].url}`
                 },
-                data: explorations
+                data: customers
             }
 
             if (req.query.page === 1) {
                 //[0] => self
                 //[1] => next
                 //prev => delete
-                payload._links.self = `${process.env.BASE_URL}${links[0].url}`;
-                payload._links.next = `${process.env.BASE_URL}${links[1].url}`;
+                payload._links.self = `${process.env.DATABASE}${links[0].url}`;
+                payload._links.next = `${process.env.DATABASE}${links[1].url}`;
                 delete payload._links.prev;
             }
 
@@ -73,8 +71,8 @@ class CustomerRoutes {
                 //[1] => prev
                 //[2] => self
                 //next => delete
-                payload._links.prev = `${process.env.BASE_URL}${links[1].url}`;
-                payload._links.self = `${process.env.BASE_URL}${links[2].url}`;
+                payload._links.prev = `${process.env.DATABASE}${links[1].url}`;
+                payload._links.self = `${process.env.DATABASE}${links[2].url}`;
                 delete payload._links.next;
             }
 
