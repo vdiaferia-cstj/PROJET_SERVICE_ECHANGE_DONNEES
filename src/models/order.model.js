@@ -1,23 +1,23 @@
 import mongoose from 'mongoose';
+import { PLANET_SIZE } from '../libs/constants.js';
+import { PIZZA_TOPPINGS } from '../libs/constants.js';
 
 const orderSchema = mongoose.Schema({
+  pizzeria: { required: true, type: mongoose.Schema.Types.ObjectId, ref: "Pizzeria" },
+  cutomer: { required: true, type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
+  order: { required: true },
 
-//Dave fait ton esti de modele pck je peux pas faire mon ?embed
+  pizzas: {
 
-    name:{type: String, unique:true, required:true },
-    discoveredBy: {type: String, index:true},
-    discoveryDate: Date,
-    temperature: Number,
-    satellites:[String],
-    position:{
-        x: {type: Number, min:-1000, max:1000, required:true},
-        y: {type: Number, min:-1000, max:1000, required:true},
-        z: {type: Number, min:-1000, max:1000, required:true}
-    }
-},{
-  collection:'Orders',
-  strict:'throw'
+    size: { type: string, required: true, enum: PLANET_SIZE },
+    orderDate: { type: Number, required: true },
+    topping: { type: string, enum: PIZZA_TOPPINGS }
+
+  }
+
+}, {
+  collection: 'Orders',
+  strict: 'throw'
 });
-
 
 export default mongoose.model('Order', orderSchema);
