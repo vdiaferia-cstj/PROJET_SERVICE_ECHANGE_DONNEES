@@ -8,7 +8,7 @@ const customerSchema = mongoose.Schema({
   planet: { type: String, required: true, enum: PLANET_NAMES },
   coord: {
     lat: { type: Number, min: -1000, max: 1000, required: true },
-    long: { type: Number, min: -1000, max: 1000, required: true },
+    lon: { type: Number, min: -1000, max: 1000, required: true },
   },
   phone: { type: String, required: true, maxLength: 16 },
   birthday: {type: Date, required: true},
