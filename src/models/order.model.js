@@ -5,7 +5,7 @@ import { PIZZA_TOPPINGS } from '../libs/constants.js';
 const orderSchema = mongoose.Schema({
   pizzeria: { required: true, type: mongoose.Schema.Types.ObjectId, ref: "Pizzeria" },
   customer: { required: true, type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
-  order: { required: true },
+  orderDate: { required: true, type: Date, default: Date.now}, // Xavier --> J'ai ajouté le type date et le default
 
   pizzas: {
 
