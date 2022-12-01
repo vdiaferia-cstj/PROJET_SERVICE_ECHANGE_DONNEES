@@ -4,7 +4,7 @@ import { PIZZA_TOPPINGS } from '../libs/constants.js';
 
 const orderSchema = mongoose.Schema({
   pizzeria: { required: true, type: mongoose.Schema.Types.ObjectId, ref: "Pizzeria" },
-  cutomer: { required: true, type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
+  customer: { required: true, type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
   order: { required: true },
 
   pizzas: {
