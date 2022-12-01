@@ -17,7 +17,7 @@ class PizzeriaRoutes {
 
     }
 
-  async getOne(req, res, next) {
+  async getOne(req, res, next) { //A
     const idPizzeria = req.params.idPizzeria;
     const retrieveOptions = {}
 
@@ -31,7 +31,7 @@ class PizzeriaRoutes {
         let pizzeria = await pizzeriaRepository.retrieveById(idPizzeria, retrieveOptions);
 
         if (pizzeria) {
-        pizzeria = pizzeria.toObject({getters:false, virtuals:false});
+        pizzeria = pizzeria.toObject({getters:false, virtuals:true});
         res.status(200).json(pizzeria);
         }
         else{

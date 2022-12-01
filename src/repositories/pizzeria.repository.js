@@ -2,9 +2,9 @@ import Pizzeria from '../models/pizzeria.model.js';
 import Order from '../models/order.model.js';
 class PizzeriaRepository {
     
-  retrieveById(idPizzeria,retrieveOption){
+  retrieveById(idPizzeria,retrieveOptions){
     const retrieveQuery = Pizzeria.findById(idPizzeria);
-    if (retrieveOption.orders) {
+    if (retrieveOptions.orders) {
         retrieveQuery.populate('orders');
     }
     return retrieveQuery;

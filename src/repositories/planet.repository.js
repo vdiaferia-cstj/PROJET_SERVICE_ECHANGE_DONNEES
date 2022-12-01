@@ -1,4 +1,3 @@
-import Planet from '../models/planet.model.js';
 import objectToDotNotation from '../libs/objectToDotNotation.js';
 import dayjs from 'dayjs';
 
