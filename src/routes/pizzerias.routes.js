@@ -42,8 +42,17 @@ class PizzeriaRoutes {
         }
     }
 
-    postOne(req, res, next) {
+    async postOne(req, res, next) {
+        try {
 
+            let newPizzeria = await pizzeriaRepository.create(req.body);
+
+            newPizzeria.toObject({ getters: false, virtuals: true });
+
+            res.status(201).json(newPizzeria);
+        } catch (err) {
+            return next(err);
+        }
     }
 }
 

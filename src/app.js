@@ -15,7 +15,7 @@ app.use(express.json());
 
 //app.use('/planets', planetsRoutes);
 //app.use('/explorations', explorationsRoutes);
-app.use('/pizzeria', PizzeriaRoutes);
+app.use('/pizzerias', PizzeriaRoutes);
 app.use('/orders', OrdersRoutes );
 app.use('/customers',CustomerRoutes );
 
