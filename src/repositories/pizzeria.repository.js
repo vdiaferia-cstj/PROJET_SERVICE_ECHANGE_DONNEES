@@ -12,6 +12,7 @@ class PizzeriaRepository {
 
   create(pizzeria) {
     return Pizzeria.create(pizzeria);
+    
   }
 
 }

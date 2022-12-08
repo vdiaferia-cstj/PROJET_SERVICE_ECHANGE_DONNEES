@@ -2,6 +2,7 @@ import express from 'express';
 import HttpError from 'http-errors';
 import paginate from 'express-paginate';
 import customerRepository from '../repositories/customer.repository.js';
+import { PLANET_NAMES } from '../libs/constants.js';
 
 const router = express.Router(); 
 
@@ -74,6 +75,7 @@ class CustomerRoutes {
                 payload._links.prev = `${process.env.DATABASE}${links[1].url}`;
                 payload._links.self = `${process.env.DATABASE}${links[2].url}`;
                 delete payload._links.next;
+                PLANET_NAMES;
             }
 
             res.status(200).json(payload);
