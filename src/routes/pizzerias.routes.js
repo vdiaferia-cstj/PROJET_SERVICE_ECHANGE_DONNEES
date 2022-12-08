@@ -13,8 +13,33 @@ class PizzeriaRoutes {
         router.post('/', this.postOne); //C
     }
 
-    getAll(req, res, next) {
+    async getAll(req, res, next) { //B
+        try{
+            const retrieveOptions={
+                limit:req.query.limit,
+                page:req.query.page,
+                speciality:req.query.speciality
+            }
 
+            let [pizzeria, itemCount] = await pizzeriaRepository.retrieve(retrieveOptions);
+
+            pizzeria = pizzeria.map(p=>{
+                p = p.toObject({getters:false, virtuals:false});
+                p = pizzeriaRepository.transform(e);
+
+                return e;
+            
+            })
+
+            // TODO: Continuer
+
+            res.status(200);
+
+        }
+
+        catch(err){
+            return next(HttpError.InternalServerError());
+        }
     }
 
     async getOne(req, res, next) { //A
@@ -42,7 +67,7 @@ class PizzeriaRoutes {
         }
     }
 
-    async postOne(req, res, next) {
+    async postOne(req, res, next) { //C
         try {
 
             let newPizzeria = await pizzeriaRepository.create(req.body);

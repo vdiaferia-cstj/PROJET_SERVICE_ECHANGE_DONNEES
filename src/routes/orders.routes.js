@@ -14,7 +14,19 @@ class OrdersRoutes {
     getAll(req, res, next) {
 
     }
-    getOne(req, res, next) {
+    getOne(req, res, next) { //B
+
+        try{
+            const retrieveOptions = {};
+            if(req.query.embed && req.query.embed === 'customer'){
+                retrieveOptions.customer = true;
+            }
+
+            const idCustomer = req.query.idCustomer;
+            
+        }catch(err){
+            return next(err);
+        }
 
     }
     
