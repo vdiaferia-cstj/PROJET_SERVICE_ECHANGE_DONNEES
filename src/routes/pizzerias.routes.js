@@ -17,7 +17,7 @@ class PizzeriaRoutes {
 
     }
 
-    async getOne(req, res, next) { //A
+    async getOne(req, res, next) { //A -- Fonctionne
         const idPizzeria = req.params.idPizzeria;
         const retrieveOptions = {}
 
