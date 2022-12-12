@@ -5,7 +5,7 @@ class CustomerRepository {
     
   retrieve(retrieveOptions){
     
-    const retrieveQuery = Customer.find().sort({birthday : 'asc'}).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+    const retrieveQuery = Customer.find({'planet' : retrieveOptions.planet}).sort({birthday : 'asc'}).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
         return Promise.all([retrieveQuery, Customer.countDocuments()]);
   }
 

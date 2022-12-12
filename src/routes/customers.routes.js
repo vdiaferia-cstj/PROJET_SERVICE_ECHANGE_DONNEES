@@ -17,12 +17,14 @@ class CustomerRoutes {
     }
 
    async getAll(req, res, next) {//A
-        try {
-
-            const retrieveOptions = {
-                limit: req.query.limit,
-                skip: req.query.skip
+        
+            const retrieveOptions = {};
+            if (req.query.planet) {
+                    retrieveOptions.planet = req.query.planet;
             }
+            retrieveOptions.limit = req.query.limit,
+            retrieveOptions.skip = req.query.skip
+            try {
             let [customers, itemsCount] = await customerRepository.retrieve(retrieveOptions);
 
             customers = customers.map(c => {
@@ -43,36 +45,27 @@ class CustomerRoutes {
                     hasNextPage: hasNextPage,
                     page: req.query.page,
                     limit: req.query.limit,
-                    skip: req.skip,
                     totalPages: pageCount,
                     totalDocuments: itemsCount
                 },
                 _links: {
-                    prev: `${process.env.DATABASE}${links[0].url}`,
-                    self: `${process.env.DATABASE}${links[1].url}`,
-                    next: `${process.env.DATABASE}${links[2].url}`
+                    prev: `${process.env.BASE_URL}${links[0].url}`,
+                    self: `${process.env.BASE_URL}${links[1].url}`,
+                    next: `${process.env.BASE_URL}${links[2].url}`
                 },
                 data: customers
             }
 
             if (req.query.page === 1) {
-                //[0] => self
-                //[1] => next
-                //prev => delete
-                payload._links.self = `${process.env.DATABASE}${links[0].url}`;
-                payload._links.next = `${process.env.DATABASE}${links[1].url}`;
+                payload._links.self = `${process.env.BASE_URL}${links[0].url}`;
+                payload._links.next = `${process.env.BASE_URL}${links[1].url}`;
                 delete payload._links.prev;
             }
 
             if (!hasNextPage) {
-                //[0] 
-                //[1] => prev
-                //[2] => self
-                //next => delete
-                payload._links.prev = `${process.env.DATABASE}${links[1].url}`;
-                payload._links.self = `${process.env.DATABASE}${links[2].url}`;
+                payload._links.prev = `${process.env.BASE_URL}${links[1].url}`;
+                payload._links.self = `${process.env.BASE_URL}${links[2].url}`;
                 delete payload._links.next;
-                PLANET_NAMES;
             }
 
             res.status(200).json(payload);
