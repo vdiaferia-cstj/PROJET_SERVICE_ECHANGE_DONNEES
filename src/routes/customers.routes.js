@@ -1,30 +1,29 @@
 import express from 'express';
 import HttpError from 'http-errors';
 import paginate from 'express-paginate';
-import customerRepository from '../repositories/customer.repository.js';
-import { PLANET_NAMES } from '../libs/constants.js';
 
-const router = express.Router(); 
+import customerRepository from '../repositories/customer.repository.js';
+
+const router = express.Router();
 
 class CustomerRoutes {
-    
+
     constructor() {
         router.post('/', this.postOne); //B
         router.put('/:idCustomer', this.updateOne); //A
         router.get('/', paginate.middleware(20, 40), this.getAll); //A
         router.get('/:idCustomer', this.getOne); //C
-        
     }
 
-   async getAll(req, res, next) {//A
-        
-            const retrieveOptions = {};
-            if (req.query.planet) {
-                    retrieveOptions.planet = req.query.planet;
-            }
-            retrieveOptions.limit = req.query.limit,
+    async getAll(req, res, next) {//A
+
+        const retrieveOptions = {};
+        if (req.query.planet) {
+            retrieveOptions.planet = req.query.planet;
+        }
+        retrieveOptions.limit = req.query.limit,
             retrieveOptions.skip = req.query.skip
-            try {
+        try {
             let [customers, itemsCount] = await customerRepository.retrieve(retrieveOptions);
 
             customers = customers.map(c => {
@@ -74,35 +73,56 @@ class CustomerRoutes {
         }
     }
 
-   async updateOne(req, res, next) {//A
-        try{
+    async updateOne(req, res, next) {//A
+        try {
             const newCustomer = req.body;
             let customer = await customerRepository.update(req.params.idCustomer, newCustomer);
-    
+
             if (!customer) {
                 res.status(404).end();
                 return next(HttpError.NotFound(`Le customer avec le id ${req.params.idCustomer} n'existe pas`));
             }
-            customer = customer.toObject({getters:false, virtuals:false});
-           // customer = customerRepository.transform(planet);
-    
+            customer = customer.toObject({ getters: false, virtuals: false });
+            // customer = customerRepository.transform(planet);
+
             if (req.query._body === 'false') {
                 res.status(204).end();
-                
+
             }
-            
+
             res.status(200).json(customer);
-          }catch (err){
+        } catch (err) {
             return next(err);
-          }
+        }
     }
 
     postOne(req, res, next) {
 
     }
 
-    getOne(req, res, next) {
+    async getOne(req, res, next) { //C
+        const idCustomer = req.params.idCustomer;
 
+        const retrieveOptions = {};
+        if (req.query.embed) {
+            if (req.query.embed === 'orders') {
+                retrieveOptions.orders = true;
+            }
+        }
+
+        try {
+            let customer = await customerRepository.retrieveById(idCustomer, retrieveOptions);
+
+            if (customer) {
+                customer = customer.toObject({ getters: false, virtuals: true });
+                customer = customerRepository.transform(customer);
+                res.status(200).json(customer);
+            } else {
+                return next(HttpError.NotFound(`Le client ${idCustomer} n'existe pas`));
+            }
+        } catch (err) {
+            return next(err);
+        }
     }
 }
 

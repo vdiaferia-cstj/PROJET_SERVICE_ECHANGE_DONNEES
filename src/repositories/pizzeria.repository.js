@@ -1,5 +1,4 @@
 import Pizzeria from '../models/pizzeria.model.js';
-import Order from '../models/order.model.js';
 class PizzeriaRepository {
 
   retrieveById(idPizzeria, retrieveOptions) {
@@ -12,7 +11,6 @@ class PizzeriaRepository {
 
   create(pizzeria) {
     return Pizzeria.create(pizzeria);
-    
   }
 
   transform(pizzeria, transformOptions = {}) {
@@ -21,10 +19,8 @@ class PizzeriaRepository {
 
     delete pizzeria._id;
 
-
     return pizzeria;
-}
-
+  }
 }
 
 export default new PizzeriaRepository();

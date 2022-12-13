@@ -3,7 +3,9 @@ import HttpError from 'http-errors';
 
 import Order from '../models/order.model';
 import pizzeriaRepository from './pizzeria.repository';
-class ExplorationRepository{
+import customerRepository from './customer.repository';
+
+class OrdersRepositories{
     retrieveByIdPizzeria(){ //B
 
 
@@ -11,3 +13,5 @@ class ExplorationRepository{
     retrieveByIdOrder(idOrder, retrieveOptions){ //B
     }
 }
+
+export default new OrdersRepositories();

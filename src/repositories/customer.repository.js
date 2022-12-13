@@ -1,40 +1,53 @@
 import Customer from '../models/customer.model.js';
 import objectToDotNotation from '../libs/objectToDotNotation.js';
-import planetRepository from './planet.repository.js';
+import dayjs from 'dayjs';
 
 class CustomerRepository {
-    
-  retrieve(retrieveOptions){//A
-    if (retrieve.Options.planet) {
-    const retrieveQuery = Customer.find({'planet' : retrieveOptions.planet}).sort({birthday : 'asc'}).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+
+  retrieveById(idCustomer, retrieveOptions) {
+    const retrieveQuery = Customer.findById(idCustomer);
+
+    if (retrieveOptions.orders){
+      retrieveQuery.populate('orders');
     }
-    else{
-    const retrieveQuery = Customer.find().sort({birthday : 'asc'}).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+
+    return retrieveQuery;
+  }
+
+  retrieve(retrieveOptions) {//A
+    if (retrieveOptions.planet) {
+      const retrieveQuery = Customer.find({ 'planet': retrieveOptions.planet }).sort({ birthday: 'asc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
     }
-        return Promise.all([retrieveQuery, Customer.countDocuments()]);
+    else {
+      const retrieveQuery = Customer.find().sort({ birthday: 'asc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+    }
+    return Promise.all([retrieveQuery, Customer.countDocuments()]);
   }
 
   update(idCustomer, customerModifs) {// A
 
     const customerToDotNotation = objectToDotNotation(customerModifs);
-    return Customer.findByIdAndUpdate(idCustomer, customerToDotNotation, {new:true});
+    return Customer.findByIdAndUpdate(idCustomer, customerToDotNotation, { new: true });
 
-}
-
-transform(customer, transformOptions = {}) {
-  if (transformOptions.planet)
-  {
-    customer.planet = planetRepository.transform(customer.planet);
   }
 
- // customer.lightspeed = `[${customer.planet}]@(${customer.coord.lat};${customer.coord.lon})`;
-  customer.href = `${process.env.BASE_URL}/customers/${customer._id}`;
+  transform(customer, transformOptions = {}) {
+    if (transformOptions.planet) {
+      customer.planet = planetRepository.transform(customer.planet);
+    }
 
-  delete customer._id;
+    customer.href = `${process.env.BASE_URL}/customers/${customer._id}`;
+    customer.phone = `[${customer.phone.slice(0, 4)}]${customer.phone.slice(4, 8)}-${customer.phone.slice(8, 14)}@${customer.phone.slice(14, 16)}`;
+    customer.age = `${dayjs().diff(customer.birthday, 'years')}`;
+    customer.lightspeed = `[${customer.planet}]@(${customer.coord.lat};${customer.coord.lon})`;
+
+    delete customer._id;
+    delete customer.id;
 
 
-  return customer;
-}
+
+    return customer;
+  }
 
 }
 

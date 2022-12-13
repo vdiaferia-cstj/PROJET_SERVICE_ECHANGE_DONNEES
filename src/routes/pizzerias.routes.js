@@ -2,6 +2,7 @@ import e from 'express';
 import express from 'express';
 import HttpError from 'http-errors';
 import pizzeriaRepository from '../repositories/pizzeria.repository.js';
+import pizzeriaValidator from '../validators/pizzeria.validator.js';
 
 const router = express.Router();
 
@@ -14,30 +15,27 @@ class PizzeriaRoutes {
     }
 
     async getAll(req, res, next) { //B
-        try{
-            const retrieveOptions={
-                limit:req.query.limit,
-                page:req.query.page,
-                speciality:req.query.speciality
+        try {
+            const retrieveOptions = {
+                limit: req.query.limit,
+                page: req.query.page,
+                speciality: req.query.speciality
             }
 
             let [pizzeria, itemCount] = await pizzeriaRepository.retrieve(retrieveOptions);
 
-            pizzeria = pizzeria.map(p=>{
-                p = p.toObject({getters:false, virtuals:false});
+            pizzeria = pizzeria.map(p => {
+                p = p.toObject({ getters: false, virtuals: false });
                 p = pizzeriaRepository.transform(e);
 
                 return e;
-            
             })
 
             // TODO: Continuer
 
             res.status(200);
-
         }
-
-        catch(err){
+        catch (err) {
             return next(HttpError.InternalServerError());
         }
     }
@@ -69,13 +67,18 @@ class PizzeriaRoutes {
     }
 
     async postOne(req, res, next) { //C
+        const newPizzeria = req.body;
+
+        if (Object.keys(newPizzeria).length === 0) {
+            return next(HttpError[204]("La pizzeria ne peut pas contenir aucune donnée"));
+        }
+
         try {
+            let pizzeriaToAdd = await pizzeriaRepository.create(newPizzeria);
+            pizzeriaToAdd = pizzeriaToAdd.toObject({ getters: false, virtual: false });
+            pizzeriaToAdd = pizzeriaRepository.transform(pizzeriaToAdd);
 
-            let newPizzeria = await pizzeriaRepository.create(req.body);
-
-            newPizzeria.toObject({ getters: false, virtuals: true });
-
-            res.status(201).json(newPizzeria);
+            res.status(201).json(pizzeriaToAdd);
         } catch (err) {
             return next(err);
         }
@@ -83,5 +86,4 @@ class PizzeriaRoutes {
 }
 
 new PizzeriaRoutes();
-
 export default router;
