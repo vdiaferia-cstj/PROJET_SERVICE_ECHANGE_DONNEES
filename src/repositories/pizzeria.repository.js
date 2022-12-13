@@ -1,5 +1,4 @@
 import Pizzeria from '../models/pizzeria.model.js';
-import Order from '../models/order.model.js';
 class PizzeriaRepository {
 
   retrieveById(idPizzeria, retrieveOptions) {
@@ -14,10 +13,14 @@ class PizzeriaRepository {
     return Pizzeria.create(pizzeria);
   }
 
-  retrieveAll(){
-    return Pizzeria.find();
-  }
+  transform(pizzeria, transformOptions = {}) {
+    pizzeria.lightspeed = `[${pizzeria.planet}]@(${pizzeria.coord.lat};${pizzeria.coord.lon})`;
+    pizzeria.href = `${process.env.BASE_URL}/pizzerias/${pizzeria._id}`;
 
+    delete pizzeria._id;
+
+    return pizzeria;
+  }
 }
 
 export default new PizzeriaRepository();

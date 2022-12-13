@@ -10,3 +10,5 @@ class ExplorationRepository{
         const retrieveQuery = Customer.find(idPizzeria,idOrder)
     }
 }
+
+export default new OrdersRepositories();

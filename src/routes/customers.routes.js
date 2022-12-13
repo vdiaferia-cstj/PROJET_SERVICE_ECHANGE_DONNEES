@@ -1,31 +1,29 @@
 import express from 'express';
 import HttpError from 'http-errors';
 import paginate from 'express-paginate';
-import customerRepository from '../repositories/customer.repository.js';
-import { PLANET_NAMES } from '../libs/constants.js';
 
-const router = express.Router(); 
+import customerRepository from '../repositories/customer.repository.js';
+
+const router = express.Router();
 
 class CustomerRoutes {
-    
+
     constructor() {
         router.post('/', this.postOne); //B
         router.put('/:idCustomer', this.updateOne); //A
         router.get('/', paginate.middleware(20, 40), this.getAll); //A
         router.get('/:idCustomer', this.getOne); //C
-        
     }
 
-   async getAll(req, res, next) {//A
+    async getAll(req, res, next) {//A
+
+        const retrieveOptions = {};
+        if (req.query.planet) {
+            retrieveOptions.planet = req.query.planet;
+        }
+        retrieveOptions.limit = req.query.limit,
+            retrieveOptions.skip = req.query.skip
         try {
-
-            const retrieveOptions = {
-                limit: req.query.limit,
-                skip: req.query.skip
-            }
-
-            console.log(req.skip);
-
             let [customers, itemsCount] = await customerRepository.retrieve(retrieveOptions);
 
             customers = customers.map(c => {
@@ -46,36 +44,27 @@ class CustomerRoutes {
                     hasNextPage: hasNextPage,
                     page: req.query.page,
                     limit: req.query.limit,
-                    skip: req.skip,
                     totalPages: pageCount,
                     totalDocuments: itemsCount
                 },
                 _links: {
-                    prev: `${process.env.DATABASE}${links[0].url}`,
-                    self: `${process.env.DATABASE}${links[1].url}`,
-                    next: `${process.env.DATABASE}${links[2].url}`
+                    prev: `${process.env.BASE_URL}${links[0].url}`,
+                    self: `${process.env.BASE_URL}${links[1].url}`,
+                    next: `${process.env.BASE_URL}${links[2].url}`
                 },
                 data: customers
             }
 
             if (req.query.page === 1) {
-                //[0] => self
-                //[1] => next
-                //prev => delete
-                payload._links.self = `${process.env.DATABASE}${links[0].url}`;
-                payload._links.next = `${process.env.DATABASE}${links[1].url}`;
+                payload._links.self = `${process.env.BASE_URL}${links[0].url}`;
+                payload._links.next = `${process.env.BASE_URL}${links[1].url}`;
                 delete payload._links.prev;
             }
 
             if (!hasNextPage) {
-                //[0] 
-                //[1] => prev
-                //[2] => self
-                //next => delete
-                payload._links.prev = `${process.env.DATABASE}${links[1].url}`;
-                payload._links.self = `${process.env.DATABASE}${links[2].url}`;
+                payload._links.prev = `${process.env.BASE_URL}${links[1].url}`;
+                payload._links.self = `${process.env.BASE_URL}${links[2].url}`;
                 delete payload._links.next;
-                PLANET_NAMES;
             }
 
             res.status(200).json(payload);
@@ -84,8 +73,27 @@ class CustomerRoutes {
         }
     }
 
-    updateOne(req, res, next) {//A
+    async updateOne(req, res, next) {//A
+        try {
+            const newCustomer = req.body;
+            let customer = await customerRepository.update(req.params.idCustomer, newCustomer);
 
+            if (!customer) {
+                res.status(404).end();
+                return next(HttpError.NotFound(`Le customer avec le id ${req.params.idCustomer} n'existe pas`));
+            }
+            customer = customer.toObject({ getters: false, virtuals: false });
+            // customer = customerRepository.transform(planet);
+
+            if (req.query._body === 'false') {
+                res.status(204).end();
+
+            }
+
+            res.status(200).json(customer);
+        } catch (err) {
+            return next(err);
+        }
     }
 
     async postOne(req, res, next) { // B
@@ -106,8 +114,29 @@ class CustomerRoutes {
 
     }
 
-    getOne(req, res, next) {
+    async getOne(req, res, next) { //C
+        const idCustomer = req.params.idCustomer;
 
+        const retrieveOptions = {};
+        if (req.query.embed) {
+            if (req.query.embed === 'orders') {
+                retrieveOptions.orders = true;
+            }
+        }
+
+        try {
+            let customer = await customerRepository.retrieveById(idCustomer, retrieveOptions);
+
+            if (customer) {
+                customer = customer.toObject({ getters: false, virtuals: true });
+                customer = customerRepository.transform(customer);
+                res.status(200).json(customer);
+            } else {
+                return next(HttpError.NotFound(`Le client ${idCustomer} n'existe pas`));
+            }
+        } catch (err) {
+            return next(err);
+        }
     }
 }
 

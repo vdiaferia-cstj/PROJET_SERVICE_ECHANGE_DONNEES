@@ -1,6 +1,7 @@
 import express from 'express';
 import HttpError from 'http-errors';
 import pizzeriaRepository from '../repositories/pizzeria.repository.js';
+import pizzeriaValidator from '../validators/pizzeria.validator.js';
 import paginate from 'express-paginate';
 
 const router = express.Router();
@@ -14,69 +15,34 @@ class PizzeriaRoutes {
     }
 
     async getAll(req, res, next) { //B
-        try{
-            const retrieveOptions={
-                limit:req.query.limit,
-                page:req.query.page,
-                speciality:req.query.speciality
+        try {
+            const retrieveOptions = {
+                limit: req.query.limit,
+                page: req.query.page,
+                speciality: req.query.speciality
             }
 
             let pizzeria = await pizzeriaRepository.retrieveAll();
 
-            pizzeria = pizzeria.map(p=>{
-                p = p.toObject({getters:false, virtuals:false});
-               // p = pizzeriaRepository.transform(e);
+            pizzeria = pizzeria.map(p => {
+                p = p.toObject({ getters: false, virtuals: false });
+                p = pizzeriaRepository.transform(e);
 
-                return p;
-            
+                return e;
             })
 
             // const pageCount = Math.ceil(itemCount/ req.query.limit);
             // const hasNextPageFunction = paginate.hasNextPages(req);
             // const hasNextPage = hasNextPageFunction(pageCount);
 
-            // const pagesLinksFunction = paginate.getArrayPages(req);
-            // const links = pagesLinksFunction(3,pageCount, req.query.page);
-
-            
-            // const payload = {
-            //     _metadata: {
-            //         hasNextPage:hasNextPage, 
-            //         page: req.query.page,
-            //         limit: req.query.limit,
-            //         skip: req.skip,
-            //         totalPages: pageCount,
-            //         totalDocuments: itemCount
-            //     },
-            //     _links: {
-            //         prev:`${process.env.BASE_URL}${links[0].url}`,
-            //         self:`${process.env.BASE_URL}${links[1].url}`,
-            //         next:`${process.env.BASE_URL}${links[2].url}`
-
-            //     }, data: explorations
-            // }
-            // if(req.query.page === 1) {
-            //     payload._links.self = `${process.env.BASE_URL}${links[0].url}`;
-            //     payload._links.next = `${process.env.BASE_URL}${links[1].url}`;
-            //     delete payload._links.prev;
-            // }
-
-            // if(!hasNextPage) {
-            //     payload._links.prev = `${process.env.BASE_URL}${links[1].url}`;
-            //     payload._links.self = `${process.env.BASE_URL}${links[2].url}`;
-            //     delete payload._links.next;
-            // }
-
-            res.status(200).json(pizzeria);
-
+            res.status(200);
         }
-
-        catch(err){
-            return next(err);
+        catch (err) {
+            return next(HttpError.InternalServerError());
         }
     }
 
-    async getOne(req, res, next) { //A
+    async getOne(req, res, next) { //A -- Fonctionne
         const idPizzeria = req.params.idPizzeria;
         const retrieveOptions = {}
 
@@ -91,6 +57,7 @@ class PizzeriaRoutes {
 
             if (pizzeria) {
                 pizzeria = pizzeria.toObject({ getters: false, virtuals: true });
+                pizzeria = pizzeriaRepository.transform(pizzeria);
                 res.status(200).json(pizzeria);
             }
             else {
@@ -102,13 +69,18 @@ class PizzeriaRoutes {
     }
 
     async postOne(req, res, next) { //C
+        const newPizzeria = req.body;
+
+        if (Object.keys(newPizzeria).length === 0) {
+            return next(HttpError[204]("La pizzeria ne peut pas contenir aucune donnée"));
+        }
+
         try {
+            let pizzeriaToAdd = await pizzeriaRepository.create(newPizzeria);
+            pizzeriaToAdd = pizzeriaToAdd.toObject({ getters: false, virtual: false });
+            pizzeriaToAdd = pizzeriaRepository.transform(pizzeriaToAdd);
 
-            let newPizzeria = await pizzeriaRepository.create(req.body);
-
-            newPizzeria.toObject({ getters: false, virtuals: true });
-
-            res.status(201).json(newPizzeria);
+            res.status(201).json(pizzeriaToAdd);
         } catch (err) {
             return next(err);
         }
@@ -116,5 +88,4 @@ class PizzeriaRoutes {
 }
 
 new PizzeriaRoutes();
-
 export default router;
