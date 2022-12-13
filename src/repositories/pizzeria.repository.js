@@ -15,6 +15,16 @@ class PizzeriaRepository {
     
   }
 
+  transform(pizzeria, transformOptions = {}) {
+    pizzeria.lightspeed = `[${pizzeria.planet}]@(${pizzeria.coord.lat};${pizzeria.coord.lon})`;
+    pizzeria.href = `${process.env.BASE_URL}/pizzerias/${pizzeria._id}`;
+
+    delete pizzeria._id;
+
+
+    return pizzeria;
+}
+
 }
 
 export default new PizzeriaRepository();

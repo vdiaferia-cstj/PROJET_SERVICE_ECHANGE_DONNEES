@@ -57,6 +57,7 @@ class PizzeriaRoutes {
 
             if (pizzeria) {
                 pizzeria = pizzeria.toObject({ getters: false, virtuals: true });
+                pizzeria = pizzeriaRepository.transform(pizzeria);
                 res.status(200).json(pizzeria);
             }
             else {
