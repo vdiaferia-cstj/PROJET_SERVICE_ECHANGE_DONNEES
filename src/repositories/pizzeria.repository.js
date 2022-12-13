@@ -12,7 +12,10 @@ class PizzeriaRepository {
 
   create(pizzeria) {
     return Pizzeria.create(pizzeria);
-    
+  }
+
+  retrieveAll(){
+    return Pizzeria.find();
   }
 
 }

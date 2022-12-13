@@ -7,6 +7,11 @@ class CustomerRepository {
         return Promise.all([retrieveQuery, Customer.countDocuments()]);
   }
 
+  create(customer){ // B
+    return Customer.create(customer);
+  }
+
+
 }
 
 export default new CustomerRepository();
