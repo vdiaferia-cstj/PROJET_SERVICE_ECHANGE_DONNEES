@@ -5,15 +5,16 @@ import { PIZZA_TOPPINGS } from '../libs/constants.js';
 const orderSchema = mongoose.Schema({
   pizzeria: { required: true, type: mongoose.Schema.Types.ObjectId, ref: "Pizzeria" },
   customer: { required: true, type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
-  orderDate: { required: true, type: Date, default: Date.now},
+  orderDate: { required: true, type: Date, default: Date.now },
 
-  pizzas: {
+  pizzas: [{
 
     size: { type: String, required: true, enum: PIZZA_SIZES },
-    orderDate: { type: Number, required: true },
-    topping: { type: String, enum: PIZZA_TOPPINGS }
-
-  }
+    price: {type: String, required: true},
+    //orderDate: { type: Number, required: true },
+    // topping: [{ type: String, enum: PIZZA_TOPPINGS }]
+    toppings: [{type: String, enum: PIZZA_TOPPINGS}]
+  }]
 
 }, {
   collection: 'Orders',

@@ -3,11 +3,34 @@ import HttpError from 'http-errors';
 
 import Order from '../models/order.model.js';
 import Customer from '../models/customer.model.js';
-import pizzeriaRepository from './pizzeria.repository';
-class ExplorationRepository{
-    
-    retrieveByIdOrder(idOrder,idPizzeria, retrieveOptions){ //B
-        const retrieveQuery = Customer.find(idPizzeria,idOrder)
+import pizzeriaRepository from './pizzeria.repository.js';
+class OrdersRepositories {
+
+    retrieve(retrieveOptions) {
+        if (retrieveOptions.topping) {
+            const retrieveQuery = Order.find({ "pizzas.toppings": retrieveOptions.topping }).sort({ orderDate: 'desc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+            return Promise.all([retrieveQuery, Order.countDocuments()]);
+
+        } else {
+            const retrieveQuery = Order.find().sort({ orderDate: 'desc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+            return Promise.all([retrieveQuery, Order.countDocuments()]);
+        }
+
+        //return Promise.all([retrieveQuery, Order.countDocuments()]);
+    }
+
+    retrieveByIdOrder(idOrder, idPizzeria, retrieveOptions) { //B
+        const retrieveQuery = Customer.find(idPizzeria, idOrder)
+    }
+
+    transform(order, retrieveOptions = {}) {
+        //if (retrieveOptions.)
+
+        order.customer = { href: `${process.env.BASE_URL}/customers/${order.customer._id}` };
+        order.pizzeria = { href: `${process.env.BASE_URL}/pizzerias/${order.pizzeria._id}` };
+
+        delete order._id;
+        return order;
     }
 }
 
