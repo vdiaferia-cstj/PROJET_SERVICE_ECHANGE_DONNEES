@@ -1,7 +1,6 @@
 import express from 'express';
 import HttpError from 'http-errors';
 import pizzeriaRepository from '../repositories/pizzeria.repository.js';
-import pizzeriaValidator from '../validators/pizzeria.validator.js';
 import paginate from 'express-paginate';
 
 const router = express.Router();
@@ -78,7 +77,7 @@ class PizzeriaRoutes {
 
         try {
             let pizzeriaToAdd = await pizzeriaRepository.create(newPizzeria);
-            pizzeriaToAdd = pizzeriaToAdd.toObject({ getters: false, virtual: false });
+            pizzeriaToAdd = pizzeriaToAdd.toObject({ getters: false, virtuals: false });
             pizzeriaToAdd = pizzeriaRepository.transform(pizzeriaToAdd);
 
             res.status(201).json(pizzeriaToAdd);

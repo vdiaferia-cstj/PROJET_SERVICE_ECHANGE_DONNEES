@@ -24,16 +24,27 @@ class OrdersRepositories {
     }
 
     transform(order, retrieveOptions) {
-     
+
         order.customer = { href: `${process.env.BASE_URL}/customers/${order.customer._id}` };
         order.pizzeria = { href: `${process.env.BASE_URL}/pizzerias/${order.pizzeria._id}` };
         order.href = order.pizzeria.href + "/orders/" + order._id;
 
+        let price = 0;
         order.pizzas.forEach(p => {
-        delete p.id;
-        delete p._id;
+            price += parseFloat(p.price);
+            order.subTotal = price;
         });
-        
+
+        order.taxRates = 0.0087;
+        console.log(price);
+        order.taxes = parseFloat((order.subTotal * order.taxRates).toFixed(3));
+        order.total = order.taxes + order.subTotal;
+
+        order.pizzas.forEach(p => {
+            delete p.id;
+            delete p._id;
+        });
+
         delete order.id;
         delete order._id;
         return order;

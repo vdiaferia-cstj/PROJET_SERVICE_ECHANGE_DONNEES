@@ -1,5 +1,6 @@
 import express from 'express';
 import HttpError from 'http-errors';
+
 import ordersRepositories from '../repositories/orders.repositories.js';
 import paginate from 'express-paginate';
 
@@ -65,8 +66,7 @@ class OrdersRoutes {
                 delete payload._links.next;
             }
 
-            res.status(200).json(payload.data);
-
+            res.status(200).json(payload);
         } catch (err) {
             return next(err);
         }
@@ -80,7 +80,6 @@ class OrdersRoutes {
             }
 
             const idCustomer = req.query.idCustomer;
-
         } catch (err) {
             return next(err);
         }
@@ -88,5 +87,4 @@ class OrdersRoutes {
 }
 
 new OrdersRoutes();
-
 export default router;
