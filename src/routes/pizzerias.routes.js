@@ -1,15 +1,15 @@
-import e from 'express';
 import express from 'express';
 import HttpError from 'http-errors';
 import pizzeriaRepository from '../repositories/pizzeria.repository.js';
 import pizzeriaValidator from '../validators/pizzeria.validator.js';
+import paginate from 'express-paginate';
 
 const router = express.Router();
 
 class PizzeriaRoutes {
 
     constructor() {
-        router.get('/', this.getAll); //B
+        router.get('/', /*paginate.middleware(25, 50),*/  this.getAll); //B
         router.get('/:idPizzeria', this.getOne); //A
         router.post('/', this.postOne); //C
     }
@@ -22,7 +22,7 @@ class PizzeriaRoutes {
                 speciality: req.query.speciality
             }
 
-            let [pizzeria, itemCount] = await pizzeriaRepository.retrieve(retrieveOptions);
+            let pizzeria = await pizzeriaRepository.retrieveAll();
 
             pizzeria = pizzeria.map(p => {
                 p = p.toObject({ getters: false, virtuals: false });
@@ -31,7 +31,9 @@ class PizzeriaRoutes {
                 return e;
             })
 
-            // TODO: Continuer
+            // const pageCount = Math.ceil(itemCount/ req.query.limit);
+            // const hasNextPageFunction = paginate.hasNextPages(req);
+            // const hasNextPage = hasNextPageFunction(pageCount);
 
             res.status(200);
         }

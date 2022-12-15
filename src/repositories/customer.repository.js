@@ -3,6 +3,7 @@ import Order from '../models/order.model.js';
 
 import objectToDotNotation from '../libs/objectToDotNotation.js';
 import dayjs from 'dayjs';
+import Order from '../models/order.model.js';
 
 class CustomerRepository {
 
@@ -50,6 +51,11 @@ class CustomerRepository {
 
     return customer;
   }
+
+  create(customer){ // B
+    return Customer.create(customer);
+  }
+
 
 }
 
