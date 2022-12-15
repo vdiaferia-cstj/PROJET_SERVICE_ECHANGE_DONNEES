@@ -1,4 +1,6 @@
 import Pizzeria from '../models/pizzeria.model.js';
+import Order from '../models/order.model.js';
+
 class PizzeriaRepository {
 
   retrieveById(idPizzeria, retrieveOptions) {
