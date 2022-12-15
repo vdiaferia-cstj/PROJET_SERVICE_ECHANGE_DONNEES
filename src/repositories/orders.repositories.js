@@ -23,12 +23,18 @@ class OrdersRepositories {
         const retrieveQuery = Customer.find(idPizzeria, idOrder)
     }
 
-    transform(order, retrieveOptions = {}) {
-        //if (retrieveOptions.)
-
+    transform(order, retrieveOptions) {
+     
         order.customer = { href: `${process.env.BASE_URL}/customers/${order.customer._id}` };
         order.pizzeria = { href: `${process.env.BASE_URL}/pizzerias/${order.pizzeria._id}` };
+        order.href = order.pizzeria.href + "/orders/" + order._id;
 
+        order.pizzas.forEach(p => {
+        delete p.id;
+        delete p._id;
+        });
+        
+        delete order.id;
         delete order._id;
         return order;
     }

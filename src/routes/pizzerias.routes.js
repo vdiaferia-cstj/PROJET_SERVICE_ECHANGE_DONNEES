@@ -48,6 +48,7 @@ class PizzeriaRoutes {
 
         if (req.query.embed) {
             if (req.query.embed === 'orders') {
+                
                 retrieveOptions.orders = true;
             }
         }
@@ -57,7 +58,7 @@ class PizzeriaRoutes {
 
             if (pizzeria) {
                 pizzeria = pizzeria.toObject({ getters: false, virtuals: true });
-                pizzeria = pizzeriaRepository.transform(pizzeria);
+                pizzeria = pizzeriaRepository.transform(pizzeria, retrieveOptions);
                 res.status(200).json(pizzeria);
             }
             else {
