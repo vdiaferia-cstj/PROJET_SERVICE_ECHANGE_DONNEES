@@ -8,7 +8,7 @@ const router = express.Router();
 class PizzeriaRoutes {
 
     constructor() {
-        router.get('/', /*paginate.middleware(25, 50),*/  this.getAll); //B
+        router.get('/', paginate.middleware(25, 50), this.getAll); //B
         router.get('/:idPizzeria', this.getOne); //A
         router.post('/', this.postOne); //C
     }
@@ -21,18 +21,49 @@ class PizzeriaRoutes {
                 speciality: req.query.speciality
             }
 
-            let pizzeria = await pizzeriaRepository.retrieveAll();
+            let [pizzeria, itemsCount] = await pizzeriaRepository.retrieveAll(retrieveOptions);
 
             pizzeria = pizzeria.map(p => {
                 p = p.toObject({ getters: false, virtuals: false });
-                p = pizzeriaRepository.transform(e);
+                p = pizzeriaRepository.transform(p);
 
-                return e;
+                return p;
             })
 
-            // const pageCount = Math.ceil(itemCount/ req.query.limit);
-            // const hasNextPageFunction = paginate.hasNextPages(req);
-            // const hasNextPage = hasNextPageFunction(pageCount);
+            const pageCount = Math.ceil(itemsCount / req.query.limit);
+            const hasNextPageFunction = paginate.hasNextPages(req);
+            const hasNextPage = hasNextPageFunction(pageCount);
+
+            const pagesLinksFunction = paginate.getArrayPages(req);
+            const links = pagesLinksFunction(3, pageCount, req.query.page);
+            const payload = {
+                _metadata: {
+                    hasNextPage: hasNextPage,
+                    page: req.query.page,
+                    limit: req.query.limit,
+                    skip: req.skip,
+                    totalPages: pageCount,
+                    totalDocuments: itemsCount
+                },
+                _links: {
+                    prev: `${process.env.BASE_URL}${links[0].url}`,
+                    self: `${process.env.BASE_URL}${links[1].url}`,
+                    next: `${process.env.BASE_URL}${links[2].url}`
+                },
+                data: pizzeria
+            }
+
+            if (req.query.page === 1) {
+                payload._links.self = `${process.env.BASE_URL}${links[0].url}`;
+                payload._links.next = `${process.env.BASE_URL}${links[1].url}`;
+                delete payload._links.prev;
+            }
+
+            if (!hasNextPage) {
+                payload._links.prev = `${process.env.BASE_URL}${links[1].url}`;
+                payload._links.self = `${process.env.BASE_URL}${links[2].url}`;
+                delete payload._links.next;
+            }
 
             res.status(200);
         }

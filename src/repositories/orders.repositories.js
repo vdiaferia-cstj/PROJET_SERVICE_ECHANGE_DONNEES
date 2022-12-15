@@ -19,8 +19,13 @@ class OrdersRepositories {
         //return Promise.all([retrieveQuery, Order.countDocuments()]);
     }
 
-    retrieveByIdOrder(idOrder, idPizzeria, retrieveOptions) { //B
-        const retrieveQuery = Customer.find(idPizzeria, idOrder)
+    retrieveByIdOrder(idOrder, idPizzeria, retrieveOptions) { //B TODO: BIEN VÉRIFIER CE RETRIEVE
+        const retrieveQuery = Customer.find(idPizzeria, idOrder);
+        if(retrieveOptions.customer){
+            retrieveQuery.populate('customer');
+        }
+
+        return retrieveQuery;
     }
 
     transform(order, retrieveOptions) {
