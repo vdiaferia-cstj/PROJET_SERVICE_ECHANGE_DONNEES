@@ -7,16 +7,17 @@ import pizzeriaRepository from './pizzeria.repository.js';
 class OrdersRepositories {
 
     retrieve(retrieveOptions) {
-        if (retrieveOptions.topping) {
-            const retrieveQuery = Order.find({ "pizzas.toppings": retrieveOptions.topping }).sort({ orderDate: 'desc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
-            return Promise.all([retrieveQuery, Order.countDocuments()]);
+        let retrieveQuery = Order.find();
+        let countQuery = Order.countDocuments();
 
-        } else {
-            const retrieveQuery = Order.find().sort({ orderDate: 'desc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
-            return Promise.all([retrieveQuery, Order.countDocuments()]);
+        if (retrieveOptions.toppings) {
+            const filter = { 'pizzas.toppings': retrieveOptions.toppings };
+            retrieveQuery = Order.find(filter);
+            countQuery = Order.countDocuments(filter);
         }
 
-        //return Promise.all([retrieveQuery, Order.countDocuments()]);
+        retrieveQuery.limit(retrieveOptions.limit).skip(retrieveOptions.skip).sort({ orderDate: 'desc' });
+        return Promise.all([retrieveQuery, countQuery]);
     }
 
     retrieveByIdOrder(idOrder, idPizzeria, retrieveOptions) { //B TODO: BIEN VÉRIFIER CE RETRIEVE
