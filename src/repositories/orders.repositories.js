@@ -7,33 +7,50 @@ import pizzeriaRepository from './pizzeria.repository.js';
 class OrdersRepositories {
 
     retrieve(retrieveOptions) {
-        if (retrieveOptions.topping) {
-            const retrieveQuery = Order.find({ "pizzas.toppings": retrieveOptions.topping }).sort({ orderDate: 'desc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
-            return Promise.all([retrieveQuery, Order.countDocuments()]);
+        let retrieveQuery = Order.find();
+        let countQuery = Order.countDocuments();
 
-        } else {
-            const retrieveQuery = Order.find().sort({ orderDate: 'desc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
-            return Promise.all([retrieveQuery, Order.countDocuments()]);
+        if (retrieveOptions.toppings) {
+            const filter = { 'pizzas.toppings': retrieveOptions.toppings };
+            retrieveQuery = Order.find(filter);
+            countQuery = Order.countDocuments(filter);
         }
 
-        //return Promise.all([retrieveQuery, Order.countDocuments()]);
+        retrieveQuery.limit(retrieveOptions.limit).skip(retrieveOptions.skip).sort({ orderDate: 'desc' });
+        return Promise.all([retrieveQuery, countQuery]);
     }
 
-    retrieveByIdOrder(idOrder, idPizzeria, retrieveOptions) { //B
-        const retrieveQuery = Customer.find(idPizzeria, idOrder)
+    retrieveByIdOrder(idOrder, idPizzeria, retrieveOptions) { //B TODO: BIEN VÉRIFIER CE RETRIEVE
+        const retrieveQuery = Customer.find(idPizzeria, idOrder);
+        if(retrieveOptions.customer){
+            retrieveQuery.populate('customer');
+        }
+
+        return retrieveQuery;
     }
 
     transform(order, retrieveOptions) {
-     
+
         order.customer = { href: `${process.env.BASE_URL}/customers/${order.customer._id}` };
         order.pizzeria = { href: `${process.env.BASE_URL}/pizzerias/${order.pizzeria._id}` };
         order.href = order.pizzeria.href + "/orders/" + order._id;
 
+        let price = 0;
         order.pizzas.forEach(p => {
-        delete p.id;
-        delete p._id;
+            price += parseFloat(p.price);
+            order.subTotal = price;
         });
-        
+
+        order.taxRates = 0.0087;
+        console.log(price);
+        order.taxes = parseFloat((order.subTotal * order.taxRates).toFixed(3));
+        order.total = order.taxes + order.subTotal;
+
+        order.pizzas.forEach(p => {
+            delete p.id;
+            delete p._id;
+        });
+
         delete order.id;
         delete order._id;
         return order;

@@ -15,7 +15,18 @@ class PizzeriaRepository {
     return Pizzeria.create(pizzeria);
   }
 
-  transform(pizzeria, transformOptions) {
+  retrieveAll(retrieveOptions){ //B
+    if(retrieveOptions.speciality){
+      const retrieveQuery= Pizzeria.find({ "chef.speciality":retrieveOptions.speciality}).sort({name:'asc'}).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+      return Promise.all([retrieveQuery,Pizzeria.countDocuments()]);
+    }
+    else{
+      const retrieveQuery = Pizzeria.find().sort({name:'asc'}).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+      return Promise.all([retrieveQuery, Pizzeria.countDocuments()]);
+    }
+  }
+
+  transform(pizzeria, transformOptions) { 
     pizzeria.lightspeed = `[${pizzeria.planet}]@(${pizzeria.coord.lat};${pizzeria.coord.lon})`;
     pizzeria.href = `${process.env.BASE_URL}/pizzerias/${pizzeria._id}`;
 

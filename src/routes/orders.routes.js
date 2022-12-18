@@ -1,5 +1,6 @@
 import express from 'express';
 import HttpError from 'http-errors';
+
 import ordersRepositories from '../repositories/orders.repositories.js';
 import paginate from 'express-paginate';
 
@@ -18,7 +19,7 @@ class OrdersRoutes {
             const retrieveOptions = {
                 limit: req.query.limit,
                 skip: req.skip,
-                topping: req.query.topping
+                toppings: req.query.toppings
             }
 
             let [orders, itemsCount] = await ordersRepositories.retrieve(retrieveOptions);
@@ -65,28 +66,37 @@ class OrdersRoutes {
                 delete payload._links.next;
             }
 
-            res.status(200).json(payload.data);
-
+            res.status(200).json(payload);
         } catch (err) {
             return next(err);
         }
     }
-    getOne(req, res, next) { //B
+    async getOne(req, res, next) { //B
 
-        try {
-            const retrieveOptions = {};
-            if (req.query.embed && req.query.embed === 'customer') {
-                retrieveOptions.customer = true;
+        const idPizzeria = req.params.idPizzeria;
+        const idOrder = req.params.idOrder;
+        const retrieveOptions={};
+
+        if(req.query.embed){
+            if(req.query.embed === 'customer'){
+                retrieveOptions.customer;
             }
-
-            const idCustomer = req.query.idCustomer;
-
-        } catch (err) {
-            return next(err);
         }
+
+         try{
+            let order = await ordersRepositories.retrieveByIdOrder(idOrder,idPizzeria,retrieveOptions);
+            if(prder){
+                order = order.toObject({getters:false, virtuals:true});
+                order = ordersRepositories.transform(order);
+                res.status(200).json(order);
+            }
+         }catch(err){
+            return next(err);
+         }
+        
+
     }
 }
 
 new OrdersRoutes();
-
 export default router;

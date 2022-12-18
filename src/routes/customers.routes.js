@@ -99,12 +99,12 @@ class CustomerRoutes {
     async postOne(req, res, next) { // B
         const newCustomer = req.body;
         if (Object.keys(newCustomer).length === 0) {
-            return next(HttpError.BadRequest('La planète ne peut pas contenir aucune donnée'));
+            return next(HttpError.BadRequest('Le client contient aucune donnée'));
           }
           try {
             let customeradded = await customerRepository.create(newCustomer);
             customeradded = customeradded.toObject({ getters: false, virtuals: false });
-            //customeradded = customerRepository.transform(customeradded);
+            customeradded = customerRepository.transform(customeradded);
       
             res.status(201).json(customeradded);
           } catch (err) {
