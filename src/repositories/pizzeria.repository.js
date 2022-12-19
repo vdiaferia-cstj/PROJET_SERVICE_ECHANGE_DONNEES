@@ -17,7 +17,6 @@ class PizzeriaRepository {
 
   retrieveAll(retrieveOptions){ //B
     
-   
     if(retrieveOptions.speciality){
       const retrieveQuery= Pizzeria.find({ "chef.speciality":retrieveOptions.speciality}).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
       return Promise.all([retrieveQuery,Pizzeria.countDocuments()]);
@@ -29,13 +28,15 @@ class PizzeriaRepository {
   }
 
   transform(pizzeria, transformOptions) { 
+
+    if (transformOptions.body === 'false') {
+      pizzeria.href = `${process.env.BASE_URL}/pizzerias/${pizzeria._id}`;
+    }
+
     pizzeria.lightspeed = `[${pizzeria.planet}]@(${pizzeria.coord.lat};${pizzeria.coord.lon})`;
     pizzeria.href = `${process.env.BASE_URL}/pizzerias/${pizzeria._id}`;
 
-
-    if (pizzeria.orders) {
-      
-    //  pizzeria.orders[0] = OrdersRepository.transform(pizzeria.orders[0]);
+    if (pizzeria.orders) {   
       pizzeria.orders = pizzeria.orders.map(o =>{
        o = OrdersRepository.transform(o);
        return o;
