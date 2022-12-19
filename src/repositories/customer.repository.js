@@ -17,10 +17,11 @@ class CustomerRepository {
 
   retrieve(retrieveOptions) {//A
     if (retrieveOptions.planet) {
-      const retrieveQuery = Customer.find({ 'planet': retrieveOptions.planet }).sort({ birthday: 'asc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+      var retrieveQuery;
+       retrieveQuery = Customer.find({ 'planet': retrieveOptions.planet }).sort({ birthday: 'asc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
     }
     else {
-      const retrieveQuery = Customer.find().sort({ birthday: 'asc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+       retrieveQuery = Customer.find().sort({ birthday: 'asc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
     }
     return Promise.all([retrieveQuery, Customer.countDocuments()]);
   }

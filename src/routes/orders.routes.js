@@ -18,7 +18,7 @@ class OrdersRoutes {
             const retrieveOptions = {
                 limit: req.query.limit,
                 skip: req.skip,
-                topping: req.query.topping
+                toppings: req.query.toppings
             }
 
             let [orders, itemsCount] = await ordersRepositories.retrieve(retrieveOptions);
