@@ -83,15 +83,13 @@ class CustomerRoutes {
                 res.status(404).end();
                 return next(HttpError.NotFound(`Le customer avec le id ${req.params.idCustomer} n'existe pas`));
             }
-            console.log(customer);
-            // customer = customerRepository.transform(planet);
 
-            if (req.query.body === 'false') {
-                res.status(204).end();
-
-            }
             customer = customer.toObject({ getters: false, virtuals: false });
             customer = customerRepository.transform(customer);
+            if (req.query._body === 'false') {
+                res.status(204).end();
+            }
+            
             res.status(200).json(customer);
 
         } catch (err) {
