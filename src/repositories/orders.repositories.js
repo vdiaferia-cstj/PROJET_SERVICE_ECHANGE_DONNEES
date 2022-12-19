@@ -46,7 +46,6 @@ class OrdersRepositories {
         });
 
         order.taxRates = 0.0087;
-        console.log(price);
         order.taxes = parseFloat((order.subTotal * order.taxRates).toFixed(3));
         order.total = order.taxes + order.subTotal;
 
