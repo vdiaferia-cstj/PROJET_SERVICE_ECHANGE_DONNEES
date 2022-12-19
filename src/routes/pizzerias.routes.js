@@ -82,7 +82,7 @@ class PizzeriaRoutes {
 
         if (req.query.embed) {
             if (req.query.embed === 'orders') {
-                
+
                 retrieveOptions.orders = true;
             }
         }
@@ -104,16 +104,23 @@ class PizzeriaRoutes {
     }
 
     async postOne(req, res, next) { //C
-        const newPizzeria = req.body;
-
-        if (Object.keys(newPizzeria).length === 0) {
-            return next(HttpError[204]("La pizzeria ne peut pas contenir aucune donnée"));
-        }
-
         try {
+            const transformOptions = {};
+            const newPizzeria = req.body;
+
+            if (Object.keys(newPizzeria).length === 0) {
+                return next(HttpError[422]("La pizzeria ne peut pas contenir aucune donnée"));
+            }
+
+            if (req.query.body === 'false') {
+                transformOptions.body = req.query.body;
+
+                return res.status(204).end();
+            }
+
             let pizzeriaToAdd = await pizzeriaRepository.create(newPizzeria);
             pizzeriaToAdd = pizzeriaToAdd.toObject({ getters: false, virtuals: false });
-            pizzeriaToAdd = pizzeriaRepository.transform(pizzeriaToAdd);
+            pizzeriaToAdd = pizzeriaRepository.transform(pizzeriaToAdd, transformOptions);
 
             res.status(201).json(pizzeriaToAdd);
         } catch (err) {
@@ -125,24 +132,24 @@ class PizzeriaRoutes {
 
         const idPizzeria = req.params.idPizzeria;
         const idOrder = req.params.idOrder;
-        const retrieveOptions={};
+        const retrieveOptions = {};
 
 
-         try{
-            let order = await ordersRepositories.retrieveOne(idOrder,idPizzeria,retrieveOptions);
+        try {
+            let order = await ordersRepositories.retrieveOne(idOrder, idPizzeria, retrieveOptions);
             console.log(order);
-            if(order){
-                order = order[0].toObject({getters:false, virtuals:false});
-                order = ordersRepositories.transform(order,retrieveOptions);
+            if (order) {
+                order = order[0].toObject({ getters: false, virtuals: false });
+                order = ordersRepositories.transform(order, retrieveOptions);
                 res.status(200).json(order);
             }
-            else{
+            else {
                 return next(HttpError.NotFound("L'order n'est pas trouve"));
             }
-         }catch(err){
+        } catch (err) {
             return next(err);
-         }
-        
+        }
+
 
     }
 }
