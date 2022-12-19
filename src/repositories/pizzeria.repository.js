@@ -16,12 +16,14 @@ class PizzeriaRepository {
   }
 
   retrieveAll(retrieveOptions){ //B
+    
+   
     if(retrieveOptions.speciality){
-      const retrieveQuery= Pizzeria.find({ "chef.speciality":retrieveOptions.speciality}).sort({name:'asc'}).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+      const retrieveQuery= Pizzeria.find({ "chef.speciality":retrieveOptions.speciality}).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
       return Promise.all([retrieveQuery,Pizzeria.countDocuments()]);
     }
     else{
-      const retrieveQuery = Pizzeria.find().sort({name:'asc'}).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+      const retrieveQuery = Pizzeria.find().limit(retrieveOptions.limit).skip(retrieveOptions.skip);
       return Promise.all([retrieveQuery, Pizzeria.countDocuments()]);
     }
   }

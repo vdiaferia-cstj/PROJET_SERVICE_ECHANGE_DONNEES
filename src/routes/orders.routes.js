@@ -10,7 +10,6 @@ class OrdersRoutes {
 
     constructor() {
         router.get('/', paginate.middleware(10, 30), this.getAll); //C
-        router.get('/:idPizzeria/orders/:idOrder', this.getOne); //B
 
     }
 
@@ -71,31 +70,11 @@ class OrdersRoutes {
             return next(err);
         }
     }
-    async getOne(req, res, next) { //B
 
-        const idPizzeria = req.params.idPizzeria;
-        const idOrder = req.params.idOrder;
-        const retrieveOptions={};
 
-        if(req.query.embed){
-            if(req.query.embed === 'customer'){
-                retrieveOptions.customer;
-            }
-        }
 
-         try{
-            let order = await ordersRepositories.retrieveByIdOrder(idOrder,idPizzeria,retrieveOptions);
-            if(prder){
-                order = order.toObject({getters:false, virtuals:true});
-                order = ordersRepositories.transform(order);
-                res.status(200).json(order);
-            }
-         }catch(err){
-            return next(err);
-         }
-        
 
-    }
+ 
 }
 
 new OrdersRoutes();

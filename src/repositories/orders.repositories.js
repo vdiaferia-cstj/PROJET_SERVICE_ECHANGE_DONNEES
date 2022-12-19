@@ -16,11 +16,14 @@ class OrdersRepositories {
             return Promise.all([retrieveQuery, Order.countDocuments()]);
         }
 
-        //return Promise.all([retrieveQuery, Order.countDocuments()]);
+
     }
 
-    retrieveByIdOrder(idOrder, idPizzeria, retrieveOptions) { //B TODO: BIEN VÉRIFIER CE RETRIEVE
-        const retrieveQuery = Customer.find(idPizzeria, idOrder);
+    retrieveOne(idOrder, idPizzeria, retrieveOptions) { //B 
+        //const retrieveQuery = Order.find({'Order._id':idOrder}).find({'Order.pizzeria':idPizzeria});
+        const retrieveQuery = Order.find({'_id':idOrder, 'pizzeria':idPizzeria})
+
+        
         if(retrieveOptions.customer){
             retrieveQuery.populate('customer');
         }
@@ -30,8 +33,10 @@ class OrdersRepositories {
 
     transform(order, retrieveOptions) {
 
-        order.customer = { href: `${process.env.BASE_URL}/customers/${order.customer._id}` };
-        order.pizzeria = { href: `${process.env.BASE_URL}/pizzerias/${order.pizzeria._id}` };
+        //order.customer = { href: `${process.env.BASE_URL}/customers/${order.customer._id}` };
+        order.customer = { href: `http://localhost:${process.env.PORT}/customers/${order.customer._id}` };
+        //order.pizzeria = { href: `${process.env.BASE_URL}/pizzerias/${order.pizzeria._id}` };
+        order.pizzeria = { href: `http://localhost:${process.env.PORT}/pizzerias/${order.pizzeria._id}` };
         order.href = order.pizzeria.href + "/orders/" + order._id;
 
         let price = 0;

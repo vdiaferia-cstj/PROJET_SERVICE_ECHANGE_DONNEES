@@ -2,6 +2,8 @@ import express from 'express';
 import HttpError from 'http-errors';
 import pizzeriaRepository from '../repositories/pizzeria.repository.js';
 import paginate from 'express-paginate';
+import ordersRepositories from '../repositories/orders.repositories.js';
+
 
 const router = express.Router();
 
@@ -11,6 +13,8 @@ class PizzeriaRoutes {
         router.get('/', paginate.middleware(25, 50), this.getAll); //B
         router.get('/:idPizzeria', this.getOne); //A
         router.post('/', this.postOne); //C
+        router.get('/:idPizzeria/orders/:idOrder', this.getOne); //B
+
     }
 
     async getAll(req, res, next) { //B
@@ -65,7 +69,7 @@ class PizzeriaRoutes {
                 delete payload._links.next;
             }
 
-            res.status(200);
+            res.status(200).json(payload);
         }
         catch (err) {
             return next(HttpError.InternalServerError());
@@ -115,6 +119,31 @@ class PizzeriaRoutes {
         } catch (err) {
             return next(err);
         }
+    }
+
+    async getOne(req, res, next) { //B
+
+        const idPizzeria = req.params.idPizzeria;
+        const idOrder = req.params.idOrder;
+        const retrieveOptions={};
+
+
+         try{
+            let order = await ordersRepositories.retrieveOne(idOrder,idPizzeria,retrieveOptions);
+            console.log(order);
+            if(order){
+                order = order[0].toObject({getters:false, virtuals:false});
+                order = ordersRepositories.transform(order,retrieveOptions);
+                res.status(200).json(order);
+            }
+            else{
+                return next(HttpError.NotFound("L'order n'est pas trouve"));
+            }
+         }catch(err){
+            return next(err);
+         }
+        
+
     }
 }
 
