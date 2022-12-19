@@ -19,11 +19,13 @@ class CustomerRepository {
     if (retrieveOptions.planet) {
       var retrieveQuery;
        retrieveQuery = Customer.find({ 'planet': retrieveOptions.planet }).sort({ birthday: 'asc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
-    }
+       return Promise.all([retrieveQuery, Customer.countDocuments()]);
+      }
     else {
        retrieveQuery = Customer.find().sort({ birthday: 'asc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
-    }
-    return Promise.all([retrieveQuery, Customer.countDocuments()]);
+       return Promise.all([retrieveQuery, Customer.countDocuments()]);
+      }
+    //return Promise.all([retrieveQuery, Customer.countDocuments()]);
   }
 
   update(idCustomer, customerModifs) {// A

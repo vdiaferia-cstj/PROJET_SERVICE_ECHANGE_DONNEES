@@ -21,7 +21,6 @@ class OrdersRepositories {
     }
 
     retrieveOne(idOrder, idPizzeria, retrieveOptions) { //B 
-        //const retrieveQuery = Order.find({'Order._id':idOrder}).find({'Order.pizzeria':idPizzeria});
         const retrieveQuery = Order.find({'_id':idOrder, 'pizzeria':idPizzeria})
 
         
