@@ -137,11 +137,10 @@ class PizzeriaRoutes {
         if(req.query.embed){
             if(req.query.embed === "customers"){
                retrieveOptions.customer = true; 
-
             }
         }
          try{
-            let order = await ordersRepositories.retrieveOne(idOrder,idPizzeria,retrieveOptions);
+            let order = await pizzeriaRepository.retrieveOne(idOrder,idPizzeria,retrieveOptions);
             console.log(order);
             if (order) {
                 order = order[0].toObject({ getters: false, virtuals: false });

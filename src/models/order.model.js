@@ -21,11 +21,11 @@ const orderSchema = mongoose.Schema({
   strict: 'throw'
 });
 
-orderSchema.virtual('customers',{
-  ref: 'Customer',
-  localField: '_id',
-  foreignField: 'order',
-  justOne:false
-})
+// orderSchema.virtual('customers',{
+//   ref: 'Customers',
+//   localField: '_id',
+//   foreignField: 'order',
+//   justOne:false
+// })
 
 export default mongoose.model('Order', orderSchema);

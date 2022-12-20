@@ -1,8 +1,9 @@
 import express from 'express';
 import HttpError from 'http-errors';
 import paginate from 'express-paginate';
-import CustomerValidator from '../validators/customer.validator.js';
+
 import validator from '../middlewares/validator.js';
+
 import customerRepository from '../repositories/customer.repository.js';
 
 const router = express.Router();
@@ -100,17 +101,23 @@ class CustomerRoutes {
 
     async postOne(req, res, next) { // B
         const newCustomer = req.body;
-        if (Object.keys(newCustomer).length === 0) {
-            return next(HttpError.BadRequest('Le client contient aucune donnée'));
-          }
-        if(!newCustomer){
-            return next(res.status(204));
-        }
+      
           try {
+
+         
+            if (req.query._body === 'false') {
+                //transformOptions._body = req.query._body;
+                    return res.status(204).end();
+                }
+
+            if (Object.keys(newCustomer) === true){
+                return (HttpError[409]);
+            }
+           
             let customeradded = await customerRepository.create(newCustomer);
             customeradded = customeradded.toObject({ getters: false, virtuals: false });
             customeradded = customerRepository.transform(customeradded);
-      
+            
             res.status(201).json(customeradded);
           } catch (err) {
             return next(err);

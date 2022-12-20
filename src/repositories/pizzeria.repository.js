@@ -16,23 +16,37 @@ class PizzeriaRepository {
   }
 
   retrieveAll(retrieveOptions){ //B
-    
+   
     if(retrieveOptions.speciality){
-      const retrieveQuery= Pizzeria.find({ "chef.speciality":retrieveOptions.speciality}).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
-      return Promise.all([retrieveQuery,Pizzeria.countDocuments()]);
+      const retrieveQuery= Pizzeria.find({ "chef.speciality":retrieveOptions.speciality}).sort({'chef.name':'desc'}).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+      return Promise.all([retrieveQuery,Pizzeria.countDocuments(Pizzeria.find({ "chef.speciality":retrieveOptions.speciality}))]);
     }
     else{
-      const retrieveQuery = Pizzeria.find().limit(retrieveOptions.limit).skip(retrieveOptions.skip);
+      const retrieveQuery = Pizzeria.find().limit(retrieveOptions.limit).sort({'chef.name':'desc'}).skip(retrieveOptions.skip);
       return Promise.all([retrieveQuery, Pizzeria.countDocuments()]);
     }
   }
 
-  transform(pizzeria, transformOptions) { 
+  retrieveOne(idOrder, idPizzeria, retrieveOptions) { //B 
+    const retrieveQuery = Order.find({'_id':idOrder, 'pizzeria':idPizzeria})
 
-    if (transformOptions.body === 'false') {
-      pizzeria.href = `${process.env.BASE_URL}/pizzerias/${pizzeria._id}`;
+    
+    if(retrieveOptions.customers){
+        retrieveQuery.populate('customers');
+        
     }
 
+    return retrieveQuery;
+}
+
+  transform(pizzeria, transformOptions) { 
+
+    //if (transformOptions.body === 'false') {
+      pizzeria.href = `${process.env.BASE_URL}/pizzerias/${pizzeria._id}`;
+   // }
+
+   
+    pizzeria.href = `${process.env.BASE_URL}/pizzerias/${pizzeria._id}`;
     pizzeria.lightspeed = `[${pizzeria.planet}]@(${pizzeria.coord.lat};${pizzeria.coord.lon})`;
     pizzeria.href = `${process.env.BASE_URL}/pizzerias/${pizzeria._id}`;
 
@@ -42,7 +56,7 @@ class PizzeriaRepository {
        return o;
       });
     }
-    
+  
     delete pizzeria.id;
     delete pizzeria._id;
 
