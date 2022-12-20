@@ -1,7 +1,8 @@
 import express from 'express';
 import HttpError from 'http-errors';
 import paginate from 'express-paginate';
-
+import CustomerValidator from '../validators/customer.validator.js';
+import validator from '../middlewares/validator.js';
 import customerRepository from '../repositories/customer.repository.js';
 
 const router = express.Router();
@@ -10,7 +11,7 @@ class CustomerRoutes {
 
     constructor() {
         router.post('/', this.postOne); //B
-        router.put('/:idCustomer', this.updateOne); //A
+        router.put('/:idCustomer', CustomerValidator.complete(), validator, this.updateOne); //A
         router.get('/', paginate.middleware(20, 40), this.getAll); //A
         router.get('/:idCustomer', this.getOne); //C
     }
@@ -80,16 +81,16 @@ class CustomerRoutes {
             let customer = await customerRepository.update(req.params.idCustomer, newCustomer);
 
             if (!customer) {
-                res.status(404).end();
                 return next(HttpError.NotFound(`Le customer avec le id ${req.params.idCustomer} n'existe pas`));
             }
-
-            customer = customer.toObject({ getters: false, virtuals: false });
-            customer = customerRepository.transform(customer);
             if (req.query._body === 'false') {
                 res.status(204).end();
             }
             
+            customer = customer.toObject({ getters: false, virtuals: false });
+            customer = customerRepository.transform(customer);
+            
+
             res.status(200).json(customer);
 
         } catch (err) {

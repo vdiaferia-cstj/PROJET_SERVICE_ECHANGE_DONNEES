@@ -11,7 +11,7 @@ class PizzeriaRoutes {
 
     constructor() {
         router.get('/', paginate.middleware(25, 50), this.getAll); //B
-        router.get('/:idPizzeria', this.getOne); //A
+        router.get('/:idPizzeria', this.getOnePizzeria); //A
         router.post('/', this.postOne); //C
         router.get('/:idPizzeria/orders/:idOrder', this.getOne); //B
 
@@ -76,7 +76,7 @@ class PizzeriaRoutes {
         }
     }
 
-    async getOne(req, res, next) { //A -- Fonctionne
+    async getOnePizzeria(req, res, next) { //A -- Fonctionne
         const idPizzeria = req.params.idPizzeria;
         const retrieveOptions = {}
 

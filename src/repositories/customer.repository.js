@@ -1,7 +1,7 @@
 import Customer from '../models/customer.model.js';
 import objectToDotNotation from '../libs/objectToDotNotation.js';
 import dayjs from 'dayjs';
-import Order from '../models/order.model.js';
+
 
 class CustomerRepository {
 
@@ -16,8 +16,8 @@ class CustomerRepository {
   }
 
   retrieve(retrieveOptions) {//A
+    let retrieveQuery;
     if (retrieveOptions.planet) {
-      var retrieveQuery;
        retrieveQuery = Customer.find({ 'planet': retrieveOptions.planet }).sort({ birthday: 'asc' }).limit(retrieveOptions.limit).skip(retrieveOptions.skip);
     }
     else {
@@ -26,8 +26,9 @@ class CustomerRepository {
     return Promise.all([retrieveQuery, Customer.countDocuments()]);
   }
 
-  update(idCustomer, customerModifs) {// A
+ 
 
+  update(idCustomer, customerModifs) {// A
     const customerToDotNotation = objectToDotNotation(customerModifs);
     return Customer.findByIdAndUpdate(idCustomer, customerToDotNotation, { new: true });
 
