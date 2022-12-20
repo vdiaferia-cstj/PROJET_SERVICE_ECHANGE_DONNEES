@@ -1,0 +1,621 @@
+{
+	"info": {
+		"_postman_id": "e0a95988-2b8c-4ea2-b01e-b16b475e9ff9",
+		"name": "TP3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23246393"
+	},
+	"item": [
+		{
+			"name": "A",
+			"item": [
+				{
+					"name": "P2",
+					"item": [
+						{
+							"name": "200",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "404",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "C2",
+					"item": [
+						{
+							"name": "200",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "204",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "409",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "404",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "422",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "C3",
+					"item": [
+						{
+							"name": "200",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "B",
+			"item": [
+				{
+					"name": "P1",
+					"item": [
+						{
+							"name": "P1 - GetAll - 200",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7187/pizzerias",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"pizzerias"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "P1 - GetAll - Speciality",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7187/pizzerias?speciality=Pepperoni&page=5&limit=2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"pizzerias"
+									],
+									"query": [
+										{
+											"key": "speciality",
+											"value": "Pepperoni"
+										},
+										{
+											"key": "page",
+											"value": "5"
+										},
+										{
+											"key": "limit",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "C1",
+					"item": [
+						{
+							"name": "C1 - AddCustomer - 201",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n            \"coord\": {\n                \"lat\": -542.305,\n                \"lon\": -855.561\n            },\n            \"name\": \"Jean philippe letourne\",\n            \"planet\": \"Phillon HZZK\",\n            \"referalCode\": \"Ookuuh6wuQuee\",\n            \"email\": \"JeanHAdam@okcool.com\",\n            \"phone\": \"[FF04]215566C\",\n            \"birthday\": \"1934-11-25T00:00:00.000Z\"\n            \n\n            \n           \n}\n        ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7187/customers",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"customers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "C1 - AddCustomer - 409",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n            \"coord\": {\n                \"lat\": -542.305,\n                \"lon\": -855.561\n            },\n            \"name\": \"Jean philippe letourne\",\n            \"planet\": \"Phillon HZZK\",\n            \"referalCode\": \"Ookuuh6wuQuee\",\n            \"email\": \"JeanHAdam@okcool.com\",\n            \"phone\": \"[FF04]215566C\",\n            \"birthday\": \"1934-11-25T00:00:00.000Z\"\n            \n\n            \n           \n}\n        ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7187/customers",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"customers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "C1 - AddCustomer - 422",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n            \"coord\": {\n                \"lat\": -542.305,\n                \"lon\": -855.561\n            },\n            \"name\": \"Jean philippe letourne\",\n            \"planet\": \"Phillon HZZK\",\n            \"referalCode\": \"Ookuuh6wuQuee\",\n            \"email\": \"JeanHAdam@okcool.com\",\n            \"phone\": \"[FF04]2155543266C\",\n            \"birthday\": \"1934-11-25T00:00:00.000Z\"\n            \n\n            \n           \n}\n        ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7187/customers",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"customers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "C1 - AddCustomer - 204",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n            \n            \n\n            \n           \n}\n        ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:7187/customers?_body=false",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"customers"
+									],
+									"query": [
+										{
+											"key": "_body",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "O2",
+					"item": [
+						{
+							"name": "O2 - GetOne - 200",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7187/pizzerias/5fc125a21633312494c41f77/orders/637cd5148b131c20c293e99a",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"pizzerias",
+										"5fc125a21633312494c41f77",
+										"orders",
+										"637cd5148b131c20c293e99a"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "O2 - GetOne - 404",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7187/pizzerias/5fc125a21633312494c41f77/orders/637cd5148b131c20c293e99a2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"pizzerias",
+										"5fc125a21633312494c41f77",
+										"orders",
+										"637cd5148b131c20c293e99a2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "C",
+			"item": [
+				{
+					"name": "O1",
+					"item": [
+						{
+							"name": "Get All Orders - 200",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7187/orders?page=2&limit=50&toppings=Jalapeño",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"orders"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										},
+										{
+											"key": "limit",
+											"value": "50"
+										},
+										{
+											"key": "toppings",
+											"value": "Jalapeño"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Orders - 404",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7187/orderrs?page=2&limit=50&toppings=Jalapeño",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"orderrs"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										},
+										{
+											"key": "limit",
+											"value": "50"
+										},
+										{
+											"key": "toppings",
+											"value": "Jalapeño"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "C4",
+					"item": [
+						{
+							"name": "Get One Customer - 200",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7187/customers/5fc125a21633312494c41ff1?embed=orders",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"customers",
+										"5fc125a21633312494c41ff1"
+									],
+									"query": [
+										{
+											"key": "embed",
+											"value": "orders"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get One Customer - 404",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7187/customers/5fc125a21633312454c41ff1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"customers",
+										"5fc125a21633312454c41ff1"
+									],
+									"query": [
+										{
+											"key": "embed",
+											"value": "orders",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "P3",
+					"item": [
+						{
+							"name": "CREATE PIZZERIA - 201",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"coord\": {\r\n        \"lat\": 670.775,\r\n        \"lon\": 752.57\r\n    },\r\n    \"chef\": {\r\n        \"name\": \"Hazn\",\r\n        \"ancestor\": \"Jantump\",\r\n        \"speciality\": \"Beef\"\r\n    },\r\n    \"planet\": \"Neon 5\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:7187/pizzerias",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"pizzerias"
+									],
+									"query": [
+										{
+											"key": "body",
+											"value": "false",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CREATE PIZZERIA - 204",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"coord\": {\r\n        \"lat\": 670.775,\r\n        \"lon\": 752.57\r\n    },\r\n    \"chef\": {\r\n        \"name\": \"Hazn\",\r\n        \"ancestor\": \"Jantump\",\r\n        \"speciality\": \"Beef\"\r\n    },\r\n    \"planet\": \"Neon 5\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:7187/pizzerias?body=false",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"pizzerias"
+									],
+									"query": [
+										{
+											"key": "body",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CREATE PIZZERIA - 422",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:7187/pizzerias",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"pizzerias"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CREATE PIZZERIA - 400",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "dfdfd",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:7187/pizzerias",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"pizzerias"
+									],
+									"query": [
+										{
+											"key": "body",
+											"value": "false",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CREATE PIZZERIA - 404",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:7187/pizzeriass",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "7187",
+									"path": [
+										"pizzeriass"
+									],
+									"query": [
+										{
+											"key": "body",
+											"value": "false",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
