@@ -103,6 +103,9 @@ class CustomerRoutes {
         if (Object.keys(newCustomer).length === 0) {
             return next(HttpError.BadRequest('Le client contient aucune donnée'));
           }
+        if(!newCustomer){
+            return next(res.status(204));
+        }
           try {
             let customeradded = await customerRepository.create(newCustomer);
             customeradded = customeradded.toObject({ getters: false, virtuals: false });

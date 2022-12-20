@@ -13,7 +13,7 @@ class PizzeriaRoutes {
         router.get('/', paginate.middleware(25, 50), this.getAll); //B
         router.get('/:idPizzeria', this.getOnePizzeria); //A
         router.post('/', this.postOne); //C
-        router.get('/:idPizzeria/orders/:idOrder', this.getOne); //B
+        router.get('/:idPizzeria/orders/:idOrder', this.getOneOrder); //B
 
     }
 
@@ -72,7 +72,7 @@ class PizzeriaRoutes {
             res.status(200).json(payload);
         }
         catch (err) {
-            return next(HttpError.InternalServerError());
+            return next(err);
         }
     }
 
@@ -128,23 +128,28 @@ class PizzeriaRoutes {
         }
     }
 
-    async getOne(req, res, next) { //B
+    async getOneOrder(req, res, next) { //B
 
         const idPizzeria = req.params.idPizzeria;
         const idOrder = req.params.idOrder;
         const retrieveOptions = {};
 
+        if(req.query.embed){
+            if(req.query.embed === "customers"){
+               retrieveOptions.customer = true; 
 
-        try {
-            let order = await ordersRepositories.retrieveOne(idOrder, idPizzeria, retrieveOptions);
+            }
+        }
+         try{
+            let order = await ordersRepositories.retrieveOne(idOrder,idPizzeria,retrieveOptions);
             console.log(order);
             if (order) {
                 order = order[0].toObject({ getters: false, virtuals: false });
                 order = ordersRepositories.transform(order, retrieveOptions);
                 res.status(200).json(order);
             }
-            else {
-                return next(HttpError.NotFound("L'order n'est pas trouve"));
+            else{
+                return next(HttpError.NotFound(`La pizzeria ${idPizzeria} ou la commande ${idOrder} n'existe pas`));
             }
         } catch (err) {
             return next(err);
