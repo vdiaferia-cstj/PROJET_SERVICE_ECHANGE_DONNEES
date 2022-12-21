@@ -3,7 +3,7 @@ import HttpError from 'http-errors';
 import paginate from 'express-paginate';
 
 import validator from '../middlewares/validator.js';
-
+import customerValidator from '../validators/customer.validator.js';
 import customerRepository from '../repositories/customer.repository.js';
 
 const router = express.Router();
@@ -12,7 +12,7 @@ class CustomerRoutes {
 
     constructor() {
         router.post('/', this.postOne); //B
-        router.put('/:idCustomer', CustomerValidator.complete(), validator, this.updateOne); //A
+        router.put('/:idCustomer', customerValidator.complete(), validator, this.updateOne); //A
         router.get('/', paginate.middleware(20, 40), this.getAll); //A
         router.get('/:idCustomer', this.getOne); //C
     }

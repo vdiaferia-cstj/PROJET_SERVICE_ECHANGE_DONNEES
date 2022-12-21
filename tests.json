@@ -358,39 +358,6 @@
 								}
 							},
 							"response": []
-						},
-						{
-							"name": "Get All Orders - 404",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:7187/orderrs?page=2&limit=50&toppings=Jalapeño",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "7187",
-									"path": [
-										"orderrs"
-									],
-									"query": [
-										{
-											"key": "page",
-											"value": "2"
-										},
-										{
-											"key": "limit",
-											"value": "50"
-										},
-										{
-											"key": "toppings",
-											"value": "Jalapeño"
-										}
-									]
-								}
-							},
-							"response": []
 						}
 					]
 				},
@@ -547,67 +514,6 @@
 									"port": "7187",
 									"path": [
 										"pizzerias"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "CREATE PIZZERIA - 400",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "dfdfd",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:7187/pizzerias",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "7187",
-									"path": [
-										"pizzerias"
-									],
-									"query": [
-										{
-											"key": "body",
-											"value": "false",
-											"disabled": true
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "CREATE PIZZERIA - 404",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:7187/pizzeriass",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "7187",
-									"path": [
-										"pizzeriass"
-									],
-									"query": [
-										{
-											"key": "body",
-											"value": "false",
-											"disabled": true
-										}
 									]
 								}
 							},
