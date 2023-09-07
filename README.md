@@ -1,4 +1,4 @@
-#Projet de service d'échange de données
+#PROJET_SERVICE_ECHANGE_DONNEES
 
 Ceci est un projet fait à 3 en classe pour faire un API. Nous avons utilisé <b>Express</b> pour programmer l'API. La liste des bibliothèques utilisées est dans package.json
 
